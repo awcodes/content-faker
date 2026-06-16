@@ -53,7 +53,7 @@ class MarkdownFaker implements Stringable
 
     public static function make(): static
     {
-        return new static();
+        return new static;
     }
 
     public function render(): string
@@ -137,7 +137,7 @@ class MarkdownFaker implements Stringable
     {
         $level = max(1, min(6, $level));
 
-        $this->blocks[] = str_repeat('#', $level) . ' ' . $text;
+        $this->blocks[] = str_repeat('#', $level).' '.$text;
 
         return $this;
     }
@@ -240,7 +240,7 @@ class MarkdownFaker implements Stringable
     public function image(?string $alt = null, ?string $url = null): static
     {
         $alt ??= $this->faker()->words(3, true);
-        $url ??= 'https://picsum.photos/seed/' . Str::slug($alt) . '/1200/800';
+        $url ??= 'https://picsum.photos/seed/'.Str::slug($alt).'/1200/800';
 
         $this->blocks[] = "![{$alt}]({$url})";
 
@@ -269,7 +269,7 @@ class MarkdownFaker implements Stringable
             : $items;
 
         $this->blocks[] = collect($items)
-            ->map(fn (string $item): string => '- ' . $this->maybeDecorateListItem($item))
+            ->map(fn (string $item): string => '- '.$this->maybeDecorateListItem($item))
             ->implode("\n");
 
         return $this;
@@ -283,7 +283,7 @@ class MarkdownFaker implements Stringable
 
         $this->blocks[] = collect($items)
             ->values()
-            ->map(fn (string $item, int $index): string => ($index + 1) . '. ' . $this->maybeDecorateListItem($item))
+            ->map(fn (string $item, int $index): string => ($index + 1).'. '.$this->maybeDecorateListItem($item))
             ->implode("\n");
 
         return $this;
@@ -296,7 +296,7 @@ class MarkdownFaker implements Stringable
             : $items;
 
         $this->blocks[] = collect($items)
-            ->map(fn (string $item): string => '- [' . $this->faker()->randomElement([' ', 'x']) . '] ' . $this->maybeDecorateListItem($item))
+            ->map(fn (string $item): string => '- ['.$this->faker()->randomElement([' ', 'x']).'] '.$this->maybeDecorateListItem($item))
             ->implode("\n");
 
         return $this;
@@ -329,10 +329,10 @@ class MarkdownFaker implements Stringable
         }
 
         $this->blocks[] = collect([
-            '| ' . implode(' | ', $headers) . ' |',
-            '| ' . collect($headers)->map(fn (): string => '---')->implode(' | ') . ' |',
+            '| '.implode(' | ', $headers).' |',
+            '| '.collect($headers)->map(fn (): string => '---')->implode(' | ').' |',
             ...collect($rows)
-                ->map(fn (array $row): string => '| ' . implode(' | ', $row) . ' |')
+                ->map(fn (array $row): string => '| '.implode(' | ', $row).' |')
                 ->all(),
         ])->implode("\n");
 
@@ -403,7 +403,7 @@ class MarkdownFaker implements Stringable
         ];
 
         $yaml = collect($data)
-            ->map(fn ($value, string $key): string => "{$key}: " . json_encode($value))
+            ->map(fn ($value, string $key): string => "{$key}: ".json_encode($value))
             ->implode("\n");
 
         array_unshift($this->blocks, "---\n{$yaml}\n---");
@@ -608,11 +608,11 @@ class MarkdownFaker implements Stringable
         }
 
         if ($this->faker()->boolean($this->linkProbability)) {
-            return "[{$text}](" . $this->faker()->url() . ')';
+            return "[{$text}](".$this->faker()->url().')';
         }
 
         if ($this->faker()->boolean($this->codeProbability)) {
-            return '`' . $this->fakeInlineCode() . '`';
+            return '`'.$this->fakeInlineCode().'`';
         }
 
         return match ($this->faker()->randomElement($this->inlineTypes)) {
@@ -620,8 +620,8 @@ class MarkdownFaker implements Stringable
             'italic' => "*{$text}*",
             'bold_italic' => "***{$text}***",
             'strikethrough' => "~~{$text}~~",
-            'code' => '`' . $this->fakeInlineCode() . '`',
-            'link' => "[{$text}](" . $this->faker()->url() . ')',
+            'code' => '`'.$this->fakeInlineCode().'`',
+            'link' => "[{$text}](".$this->faker()->url().')',
             default => $text,
         };
     }

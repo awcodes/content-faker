@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Awcodes\ContentFaker\Tests;
 
 use Awcodes\ContentFaker\ContentFakerServiceProvider;

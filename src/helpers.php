@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Awcodes\ContentFaker\HtmlFaker;
 use Awcodes\ContentFaker\MarkdownFaker;
 use Awcodes\ContentFaker\RichEditorFaker;

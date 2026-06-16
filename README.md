@@ -167,6 +167,17 @@ composer install
 composer test
 ```
 
+## Code Style
+
+The package uses [Laravel Pint](https://laravel.com/docs/pint) for formatting and [Rector](https://getrector.com) for automated refactoring:
+
+```bash
+composer format     # apply Pint fixes
+composer lint       # check formatting without changing files
+composer rector     # apply Rector refactorings
+composer rector:dry # preview Rector changes
+```
+
 ## License
 
 MIT — see [LICENSE.md](LICENSE.md).
