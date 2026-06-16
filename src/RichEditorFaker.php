@@ -4,6 +4,7 @@ namespace Awcodes\ContentFaker;
 
 class RichEditorFaker extends HtmlFaker
 {
+    /** @var array<int, string> */
     protected array $mergeTags = [
         'first_name',
         'last_name',
@@ -61,6 +62,7 @@ class RichEditorFaker extends HtmlFaker
         return $this;
     }
 
+    /** @param  array<int, array{label?: string, url?: string}>|int  $buttons */
     public function buttonGroup(array|int $buttons = 2): static
     {
         if (is_int($buttons)) {
@@ -104,6 +106,7 @@ class RichEditorFaker extends HtmlFaker
         return $this;
     }
 
+    /** @param  array<int, string>|int  $columns */
     public function columns(array|int $columns = 2): static
     {
         if (is_int($columns)) {
@@ -126,6 +129,7 @@ class RichEditorFaker extends HtmlFaker
         return $this;
     }
 
+    /** @param  array<string, mixed>  $data */
     public function customPlaceholder(string $name, array $data = []): static
     {
         $config = $this->e(json_encode($data, JSON_THROW_ON_ERROR));
@@ -146,6 +150,7 @@ class RichEditorFaker extends HtmlFaker
         return $this;
     }
 
+    /** @param  array<int, string>  $tags */
     public function paragraphWithMergeTags(array $tags = []): static
     {
         if ($tags === []) {
@@ -164,6 +169,7 @@ class RichEditorFaker extends HtmlFaker
         return $this;
     }
 
+    /** @param  array<int, string>  $tags */
     public function headingWithMergeTags(int $level = 2, array $tags = []): static
     {
         $level = max(1, min(6, $level));
@@ -181,11 +187,12 @@ class RichEditorFaker extends HtmlFaker
         return $this;
     }
 
+    /** @param  array<string, mixed>  $data */
     public function filamentBlock(string $type, array $data = []): static
     {
-        $heading = $data['heading'] ?? 'Hero';
-        $subheading = $data['subheading'] ?? null;
-        $content = $data['content'] ?? 'Generated block content.';
+        $heading = (string) ($data['heading'] ?? 'Hero');
+        $subheading = isset($data['subheading']) ? (string) $data['subheading'] : null;
+        $content = (string) ($data['content'] ?? 'Generated block content.');
 
         $reserved = ['heading', 'subheading', 'content'];
 
@@ -216,6 +223,7 @@ class RichEditorFaker extends HtmlFaker
         return $this;
     }
 
+    /** @param  array<int, array{type?: string, data?: array<string, mixed>}>  $blocks */
     public function filamentBlocks(array $blocks): static
     {
         foreach ($blocks as $block) {

@@ -29,3 +29,6 @@ jobs:
 
       - name: Check refactorings (Rector)
         run: vendor/bin/rector process --dry-run
+
+      - name: Static analysis (Larastan)
+        run: vendor/bin/phpstan analyse

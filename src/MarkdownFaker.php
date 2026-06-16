@@ -7,8 +7,12 @@ use Faker\Generator;
 use Illuminate\Support\Str;
 use Stringable;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class MarkdownFaker implements Stringable
 {
+    /** @var array<int, string> */
     protected array $blocks = [];
 
     protected bool $inlineDecorations = true;
@@ -21,6 +25,7 @@ class MarkdownFaker implements Stringable
 
     protected int $maxInlineDecorationsPerParagraph = 3;
 
+    /** @var array<int, string> */
     protected array $inlineTypes = [
         'bold',
         'italic',
@@ -30,6 +35,7 @@ class MarkdownFaker implements Stringable
         'link',
     ];
 
+    /** @var array<int, string> */
     protected array $alertTypes = [
         'NOTE',
         'TIP',
@@ -119,6 +125,7 @@ class MarkdownFaker implements Stringable
         return $this;
     }
 
+    /** @param  array<int, string>  $types */
     public function inlineTypes(array $types): static
     {
         $this->inlineTypes = array_values(array_intersect($types, [
@@ -262,6 +269,7 @@ class MarkdownFaker implements Stringable
         return $this;
     }
 
+    /** @param  array<int, string>|int  $items */
     public function unorderedList(array|int $items = 3): static
     {
         $items = is_int($items)
@@ -275,6 +283,7 @@ class MarkdownFaker implements Stringable
         return $this;
     }
 
+    /** @param  array<int, string>|int  $items */
     public function orderedList(array|int $items = 3): static
     {
         $items = is_int($items)
@@ -289,6 +298,7 @@ class MarkdownFaker implements Stringable
         return $this;
     }
 
+    /** @param  array<int, string>|int  $items */
     public function taskList(array|int $items = 3): static
     {
         $items = is_int($items)
@@ -318,6 +328,10 @@ class MarkdownFaker implements Stringable
         return $this;
     }
 
+    /**
+     * @param  array<int, string>  $headers
+     * @param  array<int, array<int, string|int>>  $rows
+     */
     public function table(array $headers = ['Name', 'Value'], array $rows = []): static
     {
         if ($rows === []) {
@@ -394,6 +408,7 @@ class MarkdownFaker implements Stringable
         return $this;
     }
 
+    /** @param  array<string, mixed>  $data */
     public function frontMatter(array $data = []): static
     {
         $data = $data ?: [

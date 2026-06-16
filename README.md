@@ -169,13 +169,14 @@ composer test
 
 ## Code Style
 
-The package uses [Laravel Pint](https://laravel.com/docs/pint) for formatting and [Rector](https://getrector.com) for automated refactoring:
+The package uses [Laravel Pint](https://laravel.com/docs/pint) for formatting, [Rector](https://getrector.com) for automated refactoring, and [Larastan](https://github.com/larastan/larastan) for static analysis:
 
 ```bash
 composer format     # apply Pint fixes
 composer lint       # check formatting without changing files
 composer rector     # apply Rector refactorings
 composer rector:dry # preview Rector changes
+composer analyse    # run Larastan static analysis
 ```
 
 ## License
