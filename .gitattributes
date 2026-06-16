@@ -1,0 +1,11 @@
+* text=auto eol=lf
+
+/.github export-ignore
+/tests export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/phpunit.xml.dist export-ignore
+/content-faker-agent-ready-specification.md export-ignore
+/FakeMarkdown.php export-ignore
+
+*.php diff=php
