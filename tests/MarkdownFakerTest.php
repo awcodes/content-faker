@@ -10,7 +10,7 @@ it('generates a heading', function (): void {
 });
 
 it('generates a paragraph', function (): void {
-    expect(MarkdownFaker::make()->paragraph('Just some text.')->render())
+    expect(MarkdownFaker::make()->withoutInlineDecorations()->paragraph('Just some text.')->render())
         ->toContain('Just some text.');
 });
 
