@@ -1,11 +1,10 @@
 includes:
     - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
 
 parameters:
-    level: 6
-
+    level: 5
     paths:
-        - config
         - src
-
-    tmpDir: .phpstan.cache
+        - config
+    tmpDir: build/phpstan

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Awcodes\ContentFaker;
 
 use Awcodes\ContentFaker\Support\EscapesHtml;
@@ -7,6 +9,7 @@ use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Support\Str;
 use Stringable;
+use Throwable;
 
 /**
  * @phpstan-consistent-constructor
@@ -60,6 +63,15 @@ class HtmlFaker implements Stringable
         $this->alertTypes = (array) $this->configValue('content-faker.html.alert_types', $this->alertTypes);
     }
 
+    public function __toString(): string
+    {
+        try {
+            return $this->toString();
+        } catch (Throwable) {
+            return '';
+        }
+    }
+
     public static function make(): static
     {
         return new static;
@@ -75,15 +87,6 @@ class HtmlFaker implements Stringable
         return collect($this->blocks)
             ->filter()
             ->implode("\n\n");
-    }
-
-    public function __toString(): string
-    {
-        try {
-            return $this->toString();
-        } catch (\Throwable) {
-            return '';
-        }
     }
 
     public function withoutInlineDecorations(): static
@@ -147,7 +150,7 @@ class HtmlFaker implements Stringable
     {
         $level = max(1, min(6, $level));
 
-        $this->blocks[] = "<h{$level}>".$this->e($text)."</h{$level}>";
+        $this->blocks[] = "<h{$level}>" . $this->e($text) . "</h{$level}>";
 
         return $this;
     }
@@ -186,7 +189,7 @@ class HtmlFaker implements Stringable
     {
         $text ??= $this->faker()->paragraph();
 
-        $this->blocks[] = '<p>'.$this->renderText($text).'</p>';
+        $this->blocks[] = '<p>' . $this->renderText($text) . '</p>';
 
         return $this;
     }
@@ -202,35 +205,35 @@ class HtmlFaker implements Stringable
 
     public function strong(string $text): static
     {
-        $this->blocks[] = '<p><strong>'.$this->e($text).'</strong></p>';
+        $this->blocks[] = '<p><strong>' . $this->e($text) . '</strong></p>';
 
         return $this;
     }
 
     public function em(string $text): static
     {
-        $this->blocks[] = '<p><em>'.$this->e($text).'</em></p>';
+        $this->blocks[] = '<p><em>' . $this->e($text) . '</em></p>';
 
         return $this;
     }
 
     public function strongEm(string $text): static
     {
-        $this->blocks[] = '<p><strong><em>'.$this->e($text).'</em></strong></p>';
+        $this->blocks[] = '<p><strong><em>' . $this->e($text) . '</em></strong></p>';
 
         return $this;
     }
 
     public function strikethrough(string $text): static
     {
-        $this->blocks[] = '<p><s>'.$this->e($text).'</s></p>';
+        $this->blocks[] = '<p><s>' . $this->e($text) . '</s></p>';
 
         return $this;
     }
 
     public function inlineCode(string $code): static
     {
-        $this->blocks[] = '<p><code>'.$this->e($code).'</code></p>';
+        $this->blocks[] = '<p><code>' . $this->e($code) . '</code></p>';
 
         return $this;
     }
@@ -240,7 +243,7 @@ class HtmlFaker implements Stringable
         $label ??= $this->faker()->words(2, true);
         $url ??= $this->faker()->url();
 
-        $this->blocks[] = '<p><a href="'.$this->e($url).'">'.$this->e($label).'</a></p>';
+        $this->blocks[] = '<p><a href="' . $this->e($url) . '">' . $this->e($label) . '</a></p>';
 
         return $this;
     }
@@ -248,9 +251,9 @@ class HtmlFaker implements Stringable
     public function image(?string $alt = null, ?string $url = null): static
     {
         $alt ??= $this->faker()->words(3, true);
-        $url ??= 'https://picsum.photos/seed/'.Str::slug($alt).'/1200/800';
+        $url ??= 'https://picsum.photos/seed/' . Str::slug($alt) . '/1200/800';
 
-        $this->blocks[] = '<img src="'.$this->e($url).'" alt="'.$this->e($alt).'">';
+        $this->blocks[] = '<img src="' . $this->e($url) . '" alt="' . $this->e($alt) . '">';
 
         return $this;
     }
@@ -259,7 +262,7 @@ class HtmlFaker implements Stringable
     {
         $alt ??= $this->faker()->words(3, true);
         $caption ??= $this->faker()->sentence();
-        $url ??= 'https://picsum.photos/seed/'.Str::slug($alt).'/1200/800';
+        $url ??= 'https://picsum.photos/seed/' . Str::slug($alt) . '/1200/800';
 
         $this->blocks[] = <<<HTML
             <figure>
@@ -275,20 +278,20 @@ class HtmlFaker implements Stringable
     {
         $text ??= $this->faker()->paragraph();
 
-        $this->blocks[] = '<blockquote>'."\n    <p>".$this->renderText($text)."</p>\n".'</blockquote>';
+        $this->blocks[] = '<blockquote>' . "\n    <p>" . $this->renderText($text) . "</p>\n" . '</blockquote>';
 
         return $this;
     }
 
     /** @param  array<int, string>|int  $items */
-    public function unorderedList(array|int $items = 3): static
+    public function unorderedList(array | int $items = 3): static
     {
         $items = is_int($items)
             ? $this->faker()->sentences($items)
             : $items;
 
         $rows = collect($items)
-            ->map(fn (string $item): string => '    <li>'.$this->decorateListItem($item).'</li>')
+            ->map(fn (string $item): string => '    <li>' . $this->decorateListItem($item) . '</li>')
             ->implode("\n");
 
         $this->blocks[] = "<ul>\n{$rows}\n</ul>";
@@ -297,14 +300,14 @@ class HtmlFaker implements Stringable
     }
 
     /** @param  array<int, string>|int  $items */
-    public function orderedList(array|int $items = 3): static
+    public function orderedList(array | int $items = 3): static
     {
         $items = is_int($items)
             ? $this->faker()->sentences($items)
             : $items;
 
         $rows = collect($items)
-            ->map(fn (string $item): string => '    <li>'.$this->decorateListItem($item).'</li>')
+            ->map(fn (string $item): string => '    <li>' . $this->decorateListItem($item) . '</li>')
             ->implode("\n");
 
         $this->blocks[] = "<ol>\n{$rows}\n</ol>";
@@ -313,7 +316,7 @@ class HtmlFaker implements Stringable
     }
 
     /** @param  array<int, string>|int  $items */
-    public function taskList(array|int $items = 3): static
+    public function taskList(array | int $items = 3): static
     {
         $items = is_int($items)
             ? $this->faker()->sentences($items)
@@ -323,7 +326,7 @@ class HtmlFaker implements Stringable
             ->map(function (string $item): string {
                 $checked = $this->faker()->boolean() ? ' checked' : '';
 
-                return '    <li><input type="checkbox" disabled'.$checked.'> '.$this->decorateListItem($item).'</li>';
+                return '    <li><input type="checkbox" disabled' . $checked . '> ' . $this->decorateListItem($item) . '</li>';
             })
             ->implode("\n");
 
@@ -336,7 +339,7 @@ class HtmlFaker implements Stringable
     {
         $code ??= $this->fakeCodeBlock($language);
 
-        $this->blocks[] = '<pre><code class="language-'.$this->e($language).'">'.$this->e($code).'</code></pre>';
+        $this->blocks[] = '<pre><code class="language-' . $this->e($language) . '">' . $this->e($code) . '</code></pre>';
 
         return $this;
     }
@@ -363,13 +366,13 @@ class HtmlFaker implements Stringable
         }
 
         $head = collect($headers)
-            ->map(fn ($header): string => '            <th>'.$this->e((string) $header).'</th>')
+            ->map(fn ($header): string => '            <th>' . $this->e((string) $header) . '</th>')
             ->implode("\n");
 
         $body = collect($rows)
             ->map(function (array $row): string {
                 $cells = collect($row)
-                    ->map(fn ($cell): string => '            <td>'.$this->e((string) $cell).'</td>')
+                    ->map(fn ($cell): string => '            <td>' . $this->e((string) $cell) . '</td>')
                     ->implode("\n");
 
                 return "        <tr>\n{$cells}\n        </tr>";
@@ -630,27 +633,27 @@ class HtmlFaker implements Stringable
 
     protected function randomInline(string $text): string
     {
-        $text = trim($text);
+        $text = mb_trim($text);
 
         if ($this->inlineTypes === []) {
             return $this->e($text);
         }
 
         if ($this->faker()->boolean($this->linkProbability)) {
-            return '<a href="'.$this->e($this->faker()->url()).'">'.$this->e($text).'</a>';
+            return '<a href="' . $this->e($this->faker()->url()) . '">' . $this->e($text) . '</a>';
         }
 
         if ($this->faker()->boolean($this->codeProbability)) {
-            return '<code>'.$this->e($this->fakeInlineCode()).'</code>';
+            return '<code>' . $this->e($this->fakeInlineCode()) . '</code>';
         }
 
         return match ($this->faker()->randomElement($this->inlineTypes)) {
-            'strong' => '<strong>'.$this->e($text).'</strong>',
-            'em' => '<em>'.$this->e($text).'</em>',
-            'strong_em' => '<strong><em>'.$this->e($text).'</em></strong>',
-            's' => '<s>'.$this->e($text).'</s>',
-            'code' => '<code>'.$this->e($this->fakeInlineCode()).'</code>',
-            'link' => '<a href="'.$this->e($this->faker()->url()).'">'.$this->e($text).'</a>',
+            'strong' => '<strong>' . $this->e($text) . '</strong>',
+            'em' => '<em>' . $this->e($text) . '</em>',
+            'strong_em' => '<strong><em>' . $this->e($text) . '</em></strong>',
+            's' => '<s>' . $this->e($text) . '</s>',
+            'code' => '<code>' . $this->e($this->fakeInlineCode()) . '</code>',
+            'link' => '<a href="' . $this->e($this->faker()->url()) . '">' . $this->e($text) . '</a>',
             default => $this->e($text),
         };
     }
@@ -670,7 +673,7 @@ class HtmlFaker implements Stringable
 
     protected function isSafeInlinePhrase(string $text): bool
     {
-        if (trim($text) === '') {
+        if (mb_trim($text) === '') {
             return false;
         }
 

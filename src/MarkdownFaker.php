@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Awcodes\ContentFaker;
 
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Support\Str;
 use Stringable;
+use Throwable;
 
 /**
  * @phpstan-consistent-constructor
@@ -57,6 +60,15 @@ class MarkdownFaker implements Stringable
         $this->alertTypes = (array) $this->configValue('content-faker.markdown.alert_types', $this->alertTypes);
     }
 
+    public function __toString(): string
+    {
+        try {
+            return $this->toString();
+        } catch (Throwable) {
+            return '';
+        }
+    }
+
     public static function make(): static
     {
         return new static;
@@ -72,15 +84,6 @@ class MarkdownFaker implements Stringable
         return collect($this->blocks)
             ->filter()
             ->implode("\n\n");
-    }
-
-    public function __toString(): string
-    {
-        try {
-            return $this->toString();
-        } catch (\Throwable) {
-            return '';
-        }
     }
 
     public function withoutInlineDecorations(): static
@@ -144,7 +147,7 @@ class MarkdownFaker implements Stringable
     {
         $level = max(1, min(6, $level));
 
-        $this->blocks[] = str_repeat('#', $level).' '.$text;
+        $this->blocks[] = str_repeat('#', $level) . ' ' . $text;
 
         return $this;
     }
@@ -247,7 +250,7 @@ class MarkdownFaker implements Stringable
     public function image(?string $alt = null, ?string $url = null): static
     {
         $alt ??= $this->faker()->words(3, true);
-        $url ??= 'https://picsum.photos/seed/'.Str::slug($alt).'/1200/800';
+        $url ??= 'https://picsum.photos/seed/' . Str::slug($alt) . '/1200/800';
 
         $this->blocks[] = "![{$alt}]({$url})";
 
@@ -270,21 +273,21 @@ class MarkdownFaker implements Stringable
     }
 
     /** @param  array<int, string>|int  $items */
-    public function unorderedList(array|int $items = 3): static
+    public function unorderedList(array | int $items = 3): static
     {
         $items = is_int($items)
             ? $this->faker()->sentences($items)
             : $items;
 
         $this->blocks[] = collect($items)
-            ->map(fn (string $item): string => '- '.$this->maybeDecorateListItem($item))
+            ->map(fn (string $item): string => '- ' . $this->maybeDecorateListItem($item))
             ->implode("\n");
 
         return $this;
     }
 
     /** @param  array<int, string>|int  $items */
-    public function orderedList(array|int $items = 3): static
+    public function orderedList(array | int $items = 3): static
     {
         $items = is_int($items)
             ? $this->faker()->sentences($items)
@@ -292,21 +295,21 @@ class MarkdownFaker implements Stringable
 
         $this->blocks[] = collect($items)
             ->values()
-            ->map(fn (string $item, int $index): string => ($index + 1).'. '.$this->maybeDecorateListItem($item))
+            ->map(fn (string $item, int $index): string => ($index + 1) . '. ' . $this->maybeDecorateListItem($item))
             ->implode("\n");
 
         return $this;
     }
 
     /** @param  array<int, string>|int  $items */
-    public function taskList(array|int $items = 3): static
+    public function taskList(array | int $items = 3): static
     {
         $items = is_int($items)
             ? $this->faker()->sentences($items)
             : $items;
 
         $this->blocks[] = collect($items)
-            ->map(fn (string $item): string => '- ['.$this->faker()->randomElement([' ', 'x']).'] '.$this->maybeDecorateListItem($item))
+            ->map(fn (string $item): string => '- [' . $this->faker()->randomElement([' ', 'x']) . '] ' . $this->maybeDecorateListItem($item))
             ->implode("\n");
 
         return $this;
@@ -343,10 +346,10 @@ class MarkdownFaker implements Stringable
         }
 
         $this->blocks[] = collect([
-            '| '.implode(' | ', $headers).' |',
-            '| '.collect($headers)->map(fn (): string => '---')->implode(' | ').' |',
+            '| ' . implode(' | ', $headers) . ' |',
+            '| ' . collect($headers)->map(fn (): string => '---')->implode(' | ') . ' |',
             ...collect($rows)
-                ->map(fn (array $row): string => '| '.implode(' | ', $row).' |')
+                ->map(fn (array $row): string => '| ' . implode(' | ', $row) . ' |')
                 ->all(),
         ])->implode("\n");
 
@@ -418,7 +421,7 @@ class MarkdownFaker implements Stringable
         ];
 
         $yaml = collect($data)
-            ->map(fn ($value, string $key): string => "{$key}: ".json_encode($value))
+            ->map(fn ($value, string $key): string => "{$key}: " . json_encode($value))
             ->implode("\n");
 
         array_unshift($this->blocks, "---\n{$yaml}\n---");
@@ -616,18 +619,18 @@ class MarkdownFaker implements Stringable
 
     protected function randomInline(string $text): string
     {
-        $text = trim($text);
+        $text = mb_trim($text);
 
         if ($this->inlineTypes === []) {
             return $text;
         }
 
         if ($this->faker()->boolean($this->linkProbability)) {
-            return "[{$text}](".$this->faker()->url().')';
+            return "[{$text}](" . $this->faker()->url() . ')';
         }
 
         if ($this->faker()->boolean($this->codeProbability)) {
-            return '`'.$this->fakeInlineCode().'`';
+            return '`' . $this->fakeInlineCode() . '`';
         }
 
         return match ($this->faker()->randomElement($this->inlineTypes)) {
@@ -635,8 +638,8 @@ class MarkdownFaker implements Stringable
             'italic' => "*{$text}*",
             'bold_italic' => "***{$text}***",
             'strikethrough' => "~~{$text}~~",
-            'code' => '`'.$this->fakeInlineCode().'`',
-            'link' => "[{$text}](".$this->faker()->url().')',
+            'code' => '`' . $this->fakeInlineCode() . '`',
+            'link' => "[{$text}](" . $this->faker()->url() . ')',
             default => $text,
         };
     }
@@ -656,7 +659,7 @@ class MarkdownFaker implements Stringable
 
     protected function isSafeInlinePhrase(string $text): bool
     {
-        if (trim($text) === '') {
+        if (mb_trim($text) === '') {
             return false;
         }
 

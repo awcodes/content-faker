@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Awcodes\ContentFaker;
 
 use Illuminate\Support\ServiceProvider;
+use Override;
 
 class ContentFakerServiceProvider extends ServiceProvider
 {
-    #[\Override]
+    #[Override]
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/content-faker.php',
+            __DIR__ . '/../config/content-faker.php',
             'content-faker'
         );
 
@@ -24,7 +25,7 @@ class ContentFakerServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__.'/../config/content-faker.php' => config_path('content-faker.php'),
+            __DIR__ . '/../config/content-faker.php' => config_path('content-faker.php'),
         ], 'content-faker-config');
     }
 }

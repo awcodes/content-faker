@@ -10,10 +10,14 @@
     },
     "require-dev": {
         "larastan/larastan": "^3.0",
-        "laravel/pint": "^1.18",
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^8.0",
         "orchestra/testbench": "^9.0|^10.0|^11.0",
-        "pestphp/pest": "^3.0|^4.0",
-        "rector/rector": "^2.0"
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-arch": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0",
+        "rector/rector": "^2.0",
+        "spatie/laravel-ray": "^1.26"
     },
     "autoload": {
         "psr-4": {
@@ -36,17 +40,25 @@
         }
     },
     "scripts": {
-        "test": "pest",
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "lint": "pint",
+        "refactor": "rector",
+        "test:lint": "pint --test",
+        "test:refactor": "rector --dry-run",
+        "test:types": "phpstan analyse",
+        "test:unit": "pest",
         "test:coverage": "pest --coverage",
-        "format": "pint",
-        "lint": "pint --test",
-        "rector": "rector process",
-        "rector:dry": "rector process --dry-run",
-        "analyse": "phpstan analyse"
+        "test": [
+            "@test:refactor",
+            "@test:lint",
+            "@test:types",
+            "@test:unit"
+        ]
     },
     "config": {
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
         }
     },
     "minimum-stability": "stable",

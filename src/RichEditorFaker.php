@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Awcodes\ContentFaker;
+
+use Override;
 
 class RichEditorFaker extends HtmlFaker
 {
@@ -38,7 +42,7 @@ class RichEditorFaker extends HtmlFaker
     {
         $text ??= $this->faker()->sentence(12);
 
-        $this->blocks[] = '<p class="lead">'.$this->renderText($text).'</p>';
+        $this->blocks[] = '<p class="lead">' . $this->renderText($text) . '</p>';
 
         return $this;
     }
@@ -47,7 +51,7 @@ class RichEditorFaker extends HtmlFaker
     {
         $text ??= $this->faker()->sentence();
 
-        $this->blocks[] = '<p><small>'.$this->renderText($text).'</small></p>';
+        $this->blocks[] = '<p><small>' . $this->renderText($text) . '</small></p>';
 
         return $this;
     }
@@ -57,13 +61,13 @@ class RichEditorFaker extends HtmlFaker
         $label ??= $this->faker()->words(2, true);
         $url ??= '#';
 
-        $this->blocks[] = '<a href="'.$this->e($url).'" class="'.$this->e($this->buttonClass).'">'.$this->e($label).'</a>';
+        $this->blocks[] = '<a href="' . $this->e($url) . '" class="' . $this->e($this->buttonClass) . '">' . $this->e($label) . '</a>';
 
         return $this;
     }
 
     /** @param  array<int, array{label?: string, url?: string}>|int  $buttons */
-    public function buttonGroup(array|int $buttons = 2): static
+    public function buttonGroup(array | int $buttons = 2): static
     {
         if (is_int($buttons)) {
             $buttons = collect(range(1, max(1, $buttons)))
@@ -76,7 +80,7 @@ class RichEditorFaker extends HtmlFaker
                 $label = $button['label'] ?? $this->faker()->words(2, true);
                 $url = $button['url'] ?? '#';
 
-                return '    <a href="'.$this->e($url).'" class="'.$this->e($this->buttonClass).'">'.$this->e($label).'</a>';
+                return '    <a href="' . $this->e($url) . '" class="' . $this->e($this->buttonClass) . '">' . $this->e($label) . '</a>';
             })
             ->implode("\n");
 
@@ -107,7 +111,7 @@ class RichEditorFaker extends HtmlFaker
     }
 
     /** @param  array<int, string>|int  $columns */
-    public function columns(array|int $columns = 2): static
+    public function columns(array | int $columns = 2): static
     {
         if (is_int($columns)) {
             $count = max(1, $columns);
@@ -119,7 +123,7 @@ class RichEditorFaker extends HtmlFaker
         $count = count($columns);
 
         $rendered = collect($columns)
-            ->map(fn (string $content): string => "    <div>\n        <p>".$this->renderText($content)."</p>\n    </div>")
+            ->map(fn (string $content): string => "    <div>\n        <p>" . $this->renderText($content) . "</p>\n    </div>")
             ->implode("\n");
 
         $class = $this->e($this->columnsClass);
@@ -145,7 +149,7 @@ class RichEditorFaker extends HtmlFaker
 
     public function mergeTag(string $key, ?string $fallback = null): static
     {
-        $this->blocks[] = '<p>'.$this->renderMergeTag($key, $fallback).'</p>';
+        $this->blocks[] = '<p>' . $this->renderMergeTag($key, $fallback) . '</p>';
 
         return $this;
     }
@@ -154,8 +158,8 @@ class RichEditorFaker extends HtmlFaker
     public function paragraphWithMergeTags(array $tags = []): static
     {
         if ($tags === []) {
-            $this->blocks[] = '<p>Hello '.$this->renderMergeTag('first_name')
-                .', welcome to '.$this->renderMergeTag('company_name').'.</p>';
+            $this->blocks[] = '<p>Hello ' . $this->renderMergeTag('first_name')
+                . ', welcome to ' . $this->renderMergeTag('company_name') . '.</p>';
 
             return $this;
         }
@@ -164,7 +168,7 @@ class RichEditorFaker extends HtmlFaker
             ->map(fn (string $tag): string => $this->renderMergeTag($tag))
             ->implode(' ');
 
-        $this->blocks[] = '<p>'.$this->e($this->faker()->sentence()).' '.$rendered.'</p>';
+        $this->blocks[] = '<p>' . $this->e($this->faker()->sentence()) . ' ' . $rendered . '</p>';
 
         return $this;
     }
@@ -199,7 +203,7 @@ class RichEditorFaker extends HtmlFaker
         $attributes = collect($data)
             ->reject(fn ($value, string $key): bool => in_array($key, $reserved, true))
             ->filter(fn ($value): bool => is_scalar($value) || $value === null)
-            ->map(fn ($value, string $key): string => ' data-'.$this->e($key).'="'.$this->e((string) $value).'"')
+            ->map(fn ($value, string $key): string => ' data-' . $this->e($key) . '="' . $this->e((string) $value) . '"')
             ->implode('');
 
         $wrapper = $this->e($this->filamentBlockWrapperClass);
@@ -233,7 +237,7 @@ class RichEditorFaker extends HtmlFaker
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function article(): static
     {
         return $this
@@ -249,7 +253,7 @@ class RichEditorFaker extends HtmlFaker
             ->unorderedList();
     }
 
-    #[\Override]
+    #[Override]
     public function docsPage(): static
     {
         return $this

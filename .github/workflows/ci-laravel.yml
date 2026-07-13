@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "config/**"
+      - "database/**"
+      - "resources/**"
+      - "routes/**"
+      - "tests/**"
+      - "composer.json"
+      - "composer.lock"
+      - "phpunit.xml*"
+      - "phpstan.neon*"
+      - "rector.php"
+      - "pint.json"
+      - ".github/workflows/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "config/**"
+      - "database/**"
+      - "resources/**"
+      - "routes/**"
+      - "tests/**"
+      - "composer.json"
+      - "composer.lock"
+      - "phpunit.xml*"
+      - "phpstan.neon*"
+      - "rector.php"
+      - "pint.json"
+      - ".github/workflows/**"
+
+jobs:
+  ci:
+    uses: awcodes/.github/.github/workflows/laravel-package.yml@v1
+    with:
+      matrix: |
+        [
+          {"php":"8.5","laravel":"13.*","testbench":"11.*","dependencies":"prefer-stable"},
+          {"php":"8.4","laravel":"13.*","testbench":"11.*","dependencies":"prefer-stable"},
+          {"php":"8.5","laravel":"12.*","testbench":"10.*","dependencies":"prefer-stable"},
+          {"php":"8.4","laravel":"12.*","testbench":"10.*","dependencies":"prefer-stable"},
+          {"php":"8.3","laravel":"12.*","testbench":"10.*","dependencies":"prefer-stable"}
+        ]
+      run-tests: true
+      run-lint: true
+      run-static-analysis: true
+      run-reformat: true
