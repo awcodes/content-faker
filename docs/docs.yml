@@ -1,0 +1,9 @@
+version: 1
+
+title: Content Faker
+
+navigation:
+  - index
+  - installation
+  - usage
+  - generators
