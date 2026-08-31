@@ -633,7 +633,7 @@ class HtmlFaker implements Stringable
 
     protected function randomInline(string $text): string
     {
-        $text = mb_trim($text);
+        $text = trim($text);
 
         if ($this->inlineTypes === []) {
             return $this->e($text);
@@ -673,7 +673,7 @@ class HtmlFaker implements Stringable
 
     protected function isSafeInlinePhrase(string $text): bool
     {
-        if (mb_trim($text) === '') {
+        if (trim($text) === '') {
             return false;
         }
 
