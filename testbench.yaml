@@ -1,0 +1,27 @@
+laravel: '@testbench'
+
+migrations:
+  - workbench/database/migrations
+
+seeders:
+  - Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: '/'
+  install: false
+  health: false
+  discovers:
+    web: true
+    api: false
+    commands: false
+    components: false
+    factories: true
+    views: true
+  build:
+    - create-sqlite-db
+    - db-wipe
+    - migrate-fresh
+  sync:
+    - from: storage
+      to: workbench/storage
+      reverse: true

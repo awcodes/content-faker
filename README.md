@@ -160,12 +160,28 @@ markdown_faker()
     ->render();
 ```
 
-## Testing
+## Development
+
+The repository ships an Orchestra Testbench Workbench — a small Laravel application, under `workbench/`, that consumes the package the way a real application would.
 
 ```bash
-composer install
-composer test
+composer install   # install dependencies
+composer test      # run Rector, Pint, Larastan and Pest
+composer build     # build the Workbench database and seed it
+composer serve     # start the Workbench at http://127.0.0.1:8000
 ```
+
+`composer serve` builds first, so a fresh clone needs nothing else.
+
+The Workbench seeds four `Workbench\App\Models\Post` records whose `markdown_content`, `html_content` and `rich_content` columns are filled by `Workbench\Database\Factories\PostFactory` using the three fakers. Each post page shows every generator's output rendered and as source, so changes to a faker are visible immediately:
+
+```text
+/                            list of seeded posts
+/posts/{slug}                Markdown, HTML and rich editor output side by side
+/posts/undecorated-example   the same presets with inline decorations disabled
+```
+
+No authentication is required, and no database server, Node toolchain or separate Laravel application is needed.
 
 ## Code Style
 
