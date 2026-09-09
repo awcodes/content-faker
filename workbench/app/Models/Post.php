@@ -28,6 +28,7 @@ class Post extends Model
         'rich_content',
     ];
 
+    #[\Override]
     public function getRouteKeyName(): string
     {
         return 'slug';
