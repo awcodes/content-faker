@@ -6,6 +6,7 @@ namespace Workbench\App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 use Workbench\Database\Factories\PostFactory;
 
 /**
@@ -28,6 +29,7 @@ class Post extends Model
         'rich_content',
     ];
 
+    #[Override]
     public function getRouteKeyName(): string
     {
         return 'slug';

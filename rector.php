@@ -8,6 +8,15 @@ try {
     return RectorConfig::configure()
         ->withPaths([
             __DIR__ . '/src',
+            // The Testbench workbench is hand-written code that exercises this
+            // package's public API, so it is refactored like anything else.
+            __DIR__ . '/workbench',
+        ])
+        ->withSkip([
+            // Gitignored symlink into testbench's storage dir; fills with compiled
+            // Blade once the workbench app runs. withSkip() tolerates a path that
+            // does not exist, unlike withPaths().
+            __DIR__ . '/workbench/storage',
         ])
         ->withPreparedSets(
             deadCode: true,
