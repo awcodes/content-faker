@@ -11,6 +11,7 @@ try {
             // The Testbench workbench is hand-written code that exercises this
             // package's public API, so it is refactored like anything else.
             __DIR__ . '/workbench',
+            __DIR__ . '/config',
         ])
         ->withSkip([
             // Gitignored symlink into testbench's storage dir; fills with compiled
