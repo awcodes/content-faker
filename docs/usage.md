@@ -117,16 +117,23 @@ To use a specific generator, for example one with your own providers, pass it to
 
 ```php
 use Faker\Factory;
+use Faker\Provider\Lorem;
 
 $faker = Factory::create();
-$faker->addProvider(new ProductCopyProvider($faker)); // overrides sentence(), paragraph()...
+$faker->addProvider(new class($faker) extends Lorem
+{
+    protected static $wordList = [
+        'deploy', 'pipeline', 'release', 'cache', 'queue', 'worker',
+        'schema', 'migration', 'endpoint', 'payload', 'webhook', 'token',
+    ];
+});
 
 MarkdownFaker::make($faker)->article()->render();
 markdown_faker($faker)->article()->render();
 MarkdownFaker::make()->withFaker($faker)->article()->render();
 ```
 
-Generated prose comes from Faker's `Lorem` provider, which no locale overrides, so a locale-specific generator still produces Latin text. To change the prose itself, add a provider that overrides `sentence()`, `paragraph()` or `words()`.
+Generated prose comes from Faker's `Lorem` provider, which no locale overrides, so a locale-specific generator still produces Latin text. To change the prose itself, add a provider that extends `Faker\Provider\Lorem` with your own `$wordList`, as above. Every word, sentence and paragraph is drawn from that list. Overriding individual methods such as `paragraph()` isn't enough, because `Lorem` calls its own methods internally rather than going through the generator.
 
 > [!NOTE]
 > Faker's `seed()` seeds PHP's process-wide random number generator, not the individual generator. Seeding any Faker instance affects all of them, so seed immediately before generating the content you want to reproduce.
