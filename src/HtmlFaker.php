@@ -72,9 +72,11 @@ class HtmlFaker implements Stringable
         }
     }
 
-    public static function make(): static
+    public static function make(?Generator $faker = null): static
     {
-        return new static;
+        $instance = new static;
+
+        return $faker instanceof Generator ? $instance->withFaker($faker) : $instance;
     }
 
     public function render(): string
@@ -99,6 +101,13 @@ class HtmlFaker implements Stringable
     public function withInlineDecorations(bool $condition = true): static
     {
         $this->inlineDecorations = $condition;
+
+        return $this;
+    }
+
+    public function withFaker(Generator $faker): static
+    {
+        $this->faker = $faker;
 
         return $this;
     }
@@ -611,8 +620,8 @@ class HtmlFaker implements Stringable
             return null;
         }
 
-        $start = random_int(0, count($words) - 1);
-        $length = random_int(1, min(3, count($words) - $start));
+        $start = $this->faker()->numberBetween(0, count($words) - 1);
+        $length = $this->faker()->numberBetween(1, min(3, count($words) - $start));
 
         $phrase = implode(' ', array_slice($words, $start, $length));
 

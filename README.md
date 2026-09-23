@@ -135,6 +135,34 @@ public function definition(): array
 }
 ```
 
+## Seeding and custom generators
+
+By default, content comes from Laravel's `fake()` generator, or from a fresh `Faker\Factory::create()` outside Laravel. Every random choice goes through that generator, including where inline decorations land, so seeding Faker makes the output reproducible:
+
+```php
+fake()->seed(1234);
+
+$markdown = markdown_faker()->docsPage()->render(); // identical on every run
+```
+
+To use a specific generator, for example one with your own providers, pass it to `make()` or a helper, or call `withFaker()`:
+
+```php
+use Faker\Factory;
+
+$faker = Factory::create();
+$faker->addProvider(new ProductCopyProvider($faker)); // overrides sentence(), paragraph()...
+
+MarkdownFaker::make($faker)->article()->render();
+markdown_faker($faker)->article()->render();
+MarkdownFaker::make()->withFaker($faker)->article()->render();
+```
+
+Generated prose comes from Faker's `Lorem` provider, which no locale overrides, so a locale-specific generator still produces Latin text. To change the prose itself, add a provider that overrides `sentence()`, `paragraph()` or `words()`.
+
+> [!NOTE]
+> Faker's `seed()` seeds PHP's process-wide random number generator, not the individual generator. Seeding any Faker instance affects all of them, so seed immediately before generating the content you want to reproduce.
+
 ## Presets
 
 Each faker implements: `article()`, `blogPost()`, `docsPage()`, `technicalDocs()`, `releaseNotes()`. `RichEditorFaker` overrides `article()` and `docsPage()` to include editor-specific content (lead paragraphs, buttons, callouts, columns, merge tags).
