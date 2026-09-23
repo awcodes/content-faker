@@ -19,6 +19,8 @@ class RichEditorFaker extends HtmlFaker
         'app_name',
     ];
 
+    protected string $mergeTagFormat = 'filament';
+
     protected string $buttonClass = 'button';
 
     protected string $columnsClass = 'columns';
@@ -32,6 +34,7 @@ class RichEditorFaker extends HtmlFaker
         parent::__construct();
 
         $this->mergeTags = (array) $this->configValue('content-faker.rich_editor.merge_tags', $this->mergeTags);
+        $this->mergeTagFormat = (string) $this->configValue('content-faker.rich_editor.merge_tag_format', $this->mergeTagFormat);
         $this->buttonClass = (string) $this->configValue('content-faker.rich_editor.button_class', $this->buttonClass);
         $this->columnsClass = (string) $this->configValue('content-faker.rich_editor.columns_class', $this->columnsClass);
         $this->calloutClass = (string) $this->configValue('content-faker.rich_editor.callout_class', $this->calloutClass);
@@ -273,6 +276,10 @@ class RichEditorFaker extends HtmlFaker
     {
         if (! preg_match('/^[A-Za-z0-9_.\-]+$/', $key)) {
             $key = 'value';
+        }
+
+        if ($this->mergeTagFormat !== 'text') {
+            return '<span data-type="mergeTag" data-id="' . $this->e($key) . '"></span>';
         }
 
         if ($fallback === null || $fallback === '') {

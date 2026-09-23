@@ -106,7 +106,11 @@ $content = RichEditorFaker::make()
 
 ### Merge tags
 
-Tags render as `{{ key }}`, or `{{ key|fallback }}` when a fallback is given. Keys are validated against letters, numbers, underscores, hyphens and dots — anything else is replaced with `value`, so a malformed key degrades rather than emitting broken output. Fallback text is escaped.
+Tags render as Filament's merge tag node, `<span data-type="mergeTag" data-id="key"></span>`, which Filament's `RichContentRenderer` fills with the values passed to `mergeTags()`. Filament merge tags have no fallback, so the `$fallback` argument of `mergeTag()` is ignored in this format.
+
+Set `rich_editor.merge_tag_format` to `text` to render plain `{{ key }}` text instead, or `{{ key|fallback }}` when a fallback is given. Fallback text is escaped.
+
+In both formats, keys are validated against letters, numbers, underscores, hyphens and dots — anything else is replaced with `value`, so a malformed key degrades rather than emitting broken output.
 
 The default tag names come from `rich_editor.merge_tags` in the config.
 
