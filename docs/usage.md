@@ -130,6 +130,7 @@ return [
             'first_name', 'last_name', 'full_name', 'email',
             'company_name', 'unsubscribe_url', 'app_name',
         ],
+        'merge_tag_format' => 'filament', // or 'text' for {{ key }}
         'filament_block_wrapper_class' => 'filament-block',
         'button_class' => 'button',
         'columns_class' => 'columns',

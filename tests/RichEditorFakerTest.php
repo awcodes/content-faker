@@ -70,37 +70,62 @@ it('generates columns from an array', function (): void {
         ->toContain('First column content');
 });
 
-it('generates a merge tag', function (): void {
+it('generates a merge tag as a filament merge tag node', function (): void {
     expect(RichEditorFaker::make()->mergeTag('first_name')->render())
-        ->toContain('{{ first_name }}');
+        ->toContain('<span data-type="mergeTag" data-id="first_name"></span>')
+        ->not->toContain('{{');
 });
 
-it('generates a merge tag with a fallback', function (): void {
+it('ignores the fallback for filament merge tags', function (): void {
     expect(RichEditorFaker::make()->mergeTag('first_name', 'Guest')->render())
-        ->toContain('{{ first_name|Guest }}');
+        ->toContain('<span data-type="mergeTag" data-id="first_name"></span>')
+        ->not->toContain('Guest');
 });
 
 it('validates invalid merge tag keys', function (): void {
     expect(RichEditorFaker::make()->mergeTag('bad key!')->render())
-        ->toContain('{{ value }}')
+        ->toContain('data-id="value"')
         ->not->toContain('bad key!');
 });
 
 it('generates a paragraph with default merge tags', function (): void {
     expect(RichEditorFaker::make()->paragraphWithMergeTags()->render())
-        ->toContain('{{ first_name }}')
-        ->toContain('{{ company_name }}');
+        ->toContain('data-id="first_name"')
+        ->toContain('data-id="company_name"');
 });
 
 it('generates a paragraph with custom merge tags', function (): void {
     expect(RichEditorFaker::make()->paragraphWithMergeTags(['email'])->render())
-        ->toContain('{{ email }}');
+        ->toContain('<span data-type="mergeTag" data-id="email"></span>');
 });
 
 it('generates a heading with merge tags', function (): void {
     expect(RichEditorFaker::make()->headingWithMergeTags(2, ['first_name'])->render())
         ->toContain('<h2>')
-        ->toContain('{{ first_name }}');
+        ->toContain('<span data-type="mergeTag" data-id="first_name"></span>');
+});
+
+it('generates text merge tags when configured', function (): void {
+    config(['content-faker.rich_editor.merge_tag_format' => 'text']);
+
+    expect(RichEditorFaker::make()->paragraphWithMergeTags(['email'])->render())
+        ->toContain('{{ email }}')
+        ->not->toContain('data-type="mergeTag"');
+});
+
+it('generates a text merge tag with a fallback when configured', function (): void {
+    config(['content-faker.rich_editor.merge_tag_format' => 'text']);
+
+    expect(RichEditorFaker::make()->mergeTag('first_name', 'Guest')->render())
+        ->toContain('{{ first_name|Guest }}');
+});
+
+it('validates invalid text merge tag keys', function (): void {
+    config(['content-faker.rich_editor.merge_tag_format' => 'text']);
+
+    expect(RichEditorFaker::make()->mergeTag('bad key!')->render())
+        ->toContain('{{ value }}')
+        ->not->toContain('bad key!');
 });
 
 it('generates a filament block placeholder', function (): void {

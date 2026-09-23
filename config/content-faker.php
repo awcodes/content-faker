@@ -62,6 +62,9 @@ return [
             'app_name',
         ],
 
+        // 'filament' emits Filament's merge tag node; 'text' emits {{ key }} text.
+        'merge_tag_format' => 'filament',
+
         'filament_block_wrapper_class' => 'filament-block',
 
         'button_class' => 'button',

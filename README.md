@@ -109,7 +109,7 @@ $content = RichEditorFaker::make()
     ->render();
 ```
 
-Merge tags render as `{{ key }}` or `{{ key|fallback }}`. Keys are validated (letters, numbers, underscores, hyphens, dots); invalid keys fall back to `value`. Filament block helpers are placeholders only and require no Filament dependency.
+Merge tags render as Filament merge tag nodes (`<span data-type="mergeTag" data-id="key"></span>`), so Filament's `RichContentRenderer` fills them. Set `rich_editor.merge_tag_format` to `text` for plain `{{ key }}` / `{{ key|fallback }}` output instead. Keys are validated (letters, numbers, underscores, hyphens, dots); invalid keys fall back to `value`. Filament block helpers are placeholders only and require no Filament dependency.
 
 ## Laravel Factory Examples
 
