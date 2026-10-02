@@ -27,13 +27,7 @@ Please see the [releases](https://github.com/awcodes/content-faker/releases) for
 
 ## Contributing
 
-The repository ships an Orchestra Testbench Workbench under `workbench/` that renders every generator's output, so changes to a faker are visible immediately:
-
-```bash
-composer install   # install dependencies
-composer test      # run Rector, Pint, Larastan and Pest
-composer serve     # build and seed the Workbench, then start it at http://127.0.0.1:8000
-```
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
