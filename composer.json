@@ -1,6 +1,6 @@
 {
     "name": "awcodes/content-faker",
-    "description": "Generate fake Markdown, HTML, and rich editor content for Laravel factories, seeders, tests, and previews.",
+    "description": "Generate realistic fake Markdown, HTML and rich editor content for Laravel factories, seeders and tests.",
     "type": "library",
     "license": "MIT",
     "require": {
@@ -9,6 +9,7 @@
         "illuminate/support": "^11.0|^12.0|^13.0"
     },
     "require-dev": {
+        "awcodes/focus": "^0.2",
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^8.0",
@@ -67,6 +68,10 @@
             "@test:lint",
             "@test:types",
             "@test:unit"
+        ],
+        "focus": [
+            "Composer\\Config::disableProcessTimeout",
+            "focus"
         ]
     },
     "config": {
